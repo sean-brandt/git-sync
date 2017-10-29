@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: google/cloud-sdk:latest
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - run:
+          name: build container
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t seanbrandt/git-sync:$CIRCLE_SHA1 .
+            docker tag seanbrandt/git-sync:$CIRCLE_SHA1 us.gcr.io/${GOOGLE_PROJECT_ID}/git-sync:$CIRCLE_SHA1
+
+      - run: docker push seanbrandt/git-sync:$CIRCLE_SHA1
+

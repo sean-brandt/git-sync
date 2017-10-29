@@ -1,7 +1,7 @@
 FROM python:3-alpine
 
 # install git
-RUN apk add --update git && rm -rf /var/cache/apk/*
+RUN apk add --no-cache --update git openssh-client bash
 
 # install click
 RUN pip install click
